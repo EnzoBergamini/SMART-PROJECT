@@ -32,3 +32,11 @@ def data_extraction() -> None:
     shutil.rmtree(folder_to_remove)
 
     dataset_version.download(target_path="data/images")
+
+
+def data_validation() -> None:
+    """Check if the data is correctly extracted."""
+    if not os.path.exists("data/images") or not os.path.exists("data/labels"):
+        raise FileNotFoundError("The data is not correctly extracted.")
+    if len(os.listdir("data/images")) != len(os.listdir("data/labels")):
+        raise ValueError("The number of images and labels is not the same.")
