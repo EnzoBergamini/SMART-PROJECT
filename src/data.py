@@ -3,6 +3,7 @@ from picsellia.types.enums import AnnotationFileType  # type: ignore
 
 import zipfile
 import shutil
+import yaml  # type: ignore
 
 from dotenv import load_dotenv
 import os
@@ -125,5 +126,20 @@ def data_preparation(
     for image, label in zip(images_val, labels_val):
         shutil.move(f"{path}/images/{image}", path + "/images/val")
         shutil.move(f"{path}/labels/{label}", path + "/labels/val")
+
+    with open(path + "/data.yaml", "r") as file:
+        data = yaml.safe_load(file)
+
+    yolo_data = {
+        "path": path,
+        "train": "images/train",
+        "val": "images/val",
+        "test": "images/test",
+        "names": {i: name for i, name in enumerate(data["names"])},
+    }
+
+    with open(path + "/config.yaml", "w") as file:
+        yaml.dump(yolo_data, file, default_flow_style=False, allow_unicode=True)
+        os.remove(path + "/data.yaml")
 
     print("Data preparation completed.")
