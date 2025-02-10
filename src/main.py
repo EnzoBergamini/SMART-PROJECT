@@ -3,6 +3,7 @@ from config import settings
 
 
 if __name__ == "__main__":
+    # DATA PIPELINE
     data_extraction(
         piscellia_api_key=settings.PICSELLIA_API_KEY,
         picsellia_dataset_uid=settings.PICSELLIA_DATASET_UID,
@@ -15,3 +16,5 @@ if __name__ == "__main__":
         val_size=settings.VAL_SIZE,
         path=settings.DATA_PATH,
     )
+
+    # TRAINING PIPELINE

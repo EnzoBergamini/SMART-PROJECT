@@ -42,7 +42,8 @@ def data_extraction(
 
     dataset_version.download(target_path=path + "/images")
 
-    shutil.move(path + "/labels/data.yaml", path + "data/data.yaml")
+    shutil.move(path + "/labels/data.yaml", path + "/data.yaml")
+    print("Data extraction completed.")
 
 
 def data_validation(path: str) -> None:
@@ -71,6 +72,8 @@ def data_validation(path: str) -> None:
 
     if not image_files == label_files:
         raise ValueError("Mismatch between image files and label files.")
+
+    print("Data validation completed.")
 
 
 def data_preparation(
@@ -103,7 +106,7 @@ def data_preparation(
     )
 
     os.makedirs(path + "/images/train", exist_ok=True)
-    os.makedirs(path + "data/labels/train", exist_ok=True)
+    os.makedirs(path + "/labels/train", exist_ok=True)
 
     for image, label in zip(images_train, labels_train):
         shutil.move(f"{path}/images/{image}", path + "/images/train")
@@ -117,11 +120,10 @@ def data_preparation(
         shutil.move(f"{path}/labels/{label}", path + "/labels/test")
 
     os.makedirs(path + "/images/val", exist_ok=True)
-    os.makedirs(path + "data/labels/val", exist_ok=True)
+    os.makedirs(path + "/labels/val", exist_ok=True)
 
     for image, label in zip(images_val, labels_val):
         shutil.move(f"{path}/images/{image}", path + "/images/val")
         shutil.move(f"{path}/labels/{label}", path + "/labels/val")
 
-    shutil.rmtree(path + "/images")
-    shutil.rmtree(path + "/labels")
+    print("Data preparation completed.")
