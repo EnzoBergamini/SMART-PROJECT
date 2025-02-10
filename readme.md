@@ -52,7 +52,10 @@ uv venv --python 3.11 .venv
 uv pip install -r requirements.txt
 ```
 
-3. **Configuration de pre-commit**
+3. **Configuration de dynaconf**
+rename `.exemple.toml` to `.secrets.toml` and fill the fields
+
+4. **Configuration de pre-commit**
 ```sh
 pre-commit install
 ```
