@@ -1,0 +1,17 @@
+path: data
+
+train: images/train
+val: images/val
+test: images/test
+
+names:
+    0: Granola
+    1: Balisto_violet
+    2: Thon
+    3: Bouteille_plastique
+    4: Bueno_white
+    5: Bueno_black
+    6: Tablette_chocolat
+    7: Kinder_Délice
+    8: Snikers
+    9: Twix

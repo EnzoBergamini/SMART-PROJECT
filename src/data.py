@@ -11,7 +11,9 @@ from sklearn.model_selection import train_test_split  # type: ignore
 load_dotenv()
 
 
-def data_extraction(piscellia_api_key: str, picsellia_dataset_uid: str) -> None:
+def data_extraction(
+    piscellia_api_key: str, picsellia_dataset_uid: str, path: str
+) -> None:
     """Extract the images and labels from the dataset version and save them in the data folder.
 
     Args:
@@ -26,11 +28,11 @@ def data_extraction(piscellia_api_key: str, picsellia_dataset_uid: str) -> None:
     dataset_version = client.get_dataset_version_by_id(id=picsellia_dataset_uid)
 
     annotation_file_path = dataset_version.export_annotation_file(
-        annotation_file_type=AnnotationFileType.YOLO, target_path="data/"
+        annotation_file_type=AnnotationFileType.YOLO, target_path=path
     )
 
     with zipfile.ZipFile(annotation_file_path, "r") as zip_ref:
-        zip_ref.extractall("data/labels")
+        zip_ref.extractall(path + "/labels")
 
     folder_to_remove = (
         annotation_file_path.split("/")[0] + "/" + annotation_file_path.split("/")[1]
@@ -38,40 +40,42 @@ def data_extraction(piscellia_api_key: str, picsellia_dataset_uid: str) -> None:
 
     shutil.rmtree(folder_to_remove)
 
-    dataset_version.download(target_path="data/images")
+    dataset_version.download(target_path=path + "/images")
 
-    shutil.move("data/labels/data.yaml", "data/data.yaml")
+    shutil.move(path + "/labels/data.yaml", path + "data/data.yaml")
 
 
-def data_validation() -> None:
+def data_validation(path: str) -> None:
     """Validate the data extracted from Picsellia.
 
     Returns:
         None
     """
-    if not os.path.exists("data/images"):
+    if not os.path.exists(path + "/images"):
         raise FileNotFoundError("The images folders are missing.")
 
-    if len(os.listdir("data/images")) == 0:
+    if len(os.listdir(path + "/images")) == 0:
         raise FileNotFoundError("The images folders are empty.")
 
-    if not os.path.exists("data/labels"):
+    if not os.path.exists(path + "/labels"):
         raise FileNotFoundError("The labels folders are missing.")
 
-    if len(os.listdir("data/labels")) == 0:
+    if len(os.listdir(path + "/labels")) == 0:
         raise FileNotFoundError("The labels folders are empty.")
 
-    if len(os.listdir("data/images")) != len(os.listdir("data/labels")):
+    if len(os.listdir(path + "/images")) != len(os.listdir(path + "/labels")):
         raise ValueError("The number of images and labels are different.")
 
-    image_files = set(os.path.splitext(f)[0] for f in os.listdir("data/images"))
-    label_files = set(os.path.splitext(f)[0] for f in os.listdir("data/labels"))
+    image_files = set(os.path.splitext(f)[0] for f in os.listdir(path + "/images"))
+    label_files = set(os.path.splitext(f)[0] for f in os.listdir(path + "/labels"))
 
     if not image_files == label_files:
         raise ValueError("Mismatch between image files and label files.")
 
 
-def data_preparation(random_seed: int, test_size: float, val_size: float) -> None:
+def data_preparation(
+    random_seed: int, test_size: float, val_size: float, path: str
+) -> None:
     """Prepare the data by splitting it into training, validation, and testing sets.
 
     Args:
@@ -82,8 +86,8 @@ def data_preparation(random_seed: int, test_size: float, val_size: float) -> Non
     Returns:
         None
     """
-    image_files = os.listdir("data/images")
-    label_files = os.listdir("data/labels")
+    image_files = os.listdir(path + "/images")
+    label_files = os.listdir(path + "/labels")
 
     image_files.sort()
     label_files.sort()
@@ -98,26 +102,26 @@ def data_preparation(random_seed: int, test_size: float, val_size: float) -> Non
         images_train, labels_train, test_size=val_size, random_state=random_seed
     )
 
-    os.makedirs("data/train/images", exist_ok=True)
-    os.makedirs("data/train/labels", exist_ok=True)
+    os.makedirs(path + "/images/train", exist_ok=True)
+    os.makedirs(path + "data/labels/train", exist_ok=True)
 
     for image, label in zip(images_train, labels_train):
-        shutil.move(f"data/images/{image}", "data/train/images")
-        shutil.move(f"data/labels/{label}", "data/train/labels")
+        shutil.move(f"{path}/images/{image}", path + "/images/train")
+        shutil.move(f"{path}/labels/{label}", path + "/labels/train")
 
-    os.makedirs("data/test/images", exist_ok=True)
-    os.makedirs("data/test/labels", exist_ok=True)
+    os.makedirs(path + "/images/test", exist_ok=True)
+    os.makedirs(path + "/labels/test", exist_ok=True)
 
     for image, label in zip(images_test, labels_test):
-        shutil.move(f"data/images/{image}", "data/test/images")
-        shutil.move(f"data/labels/{label}", "data/test/labels")
+        shutil.move(f"{path}/images/{image}", path + "/images/test")
+        shutil.move(f"{path}/labels/{label}", path + "/labels/test")
 
-    os.makedirs("data/val/images", exist_ok=True)
-    os.makedirs("data/val/labels", exist_ok=True)
+    os.makedirs(path + "/images/val", exist_ok=True)
+    os.makedirs(path + "data/labels/val", exist_ok=True)
 
     for image, label in zip(images_val, labels_val):
-        shutil.move(f"data/images/{image}", "data/val/images")
-        shutil.move(f"data/labels/{label}", "data/val/labels")
+        shutil.move(f"{path}/images/{image}", path + "/images/val")
+        shutil.move(f"{path}/labels/{label}", path + "/labels/val")
 
-    shutil.rmtree("data/images")
-    shutil.rmtree("data/labels")
+    shutil.rmtree(path + "/images")
+    shutil.rmtree(path + "/labels")
