@@ -1,4 +1,9 @@
 picsellia==6.20.0
-dotenv
-ruff
-pre-commit
+dotenv==1.0.1
+ruff==0.9.6
+pre-commit==4.1.0
+scikit-learn==1.6.1
+ultralytics==8.3.74
+mlflow==2.20.1
+PyYAML==6.0.2
+dynaconf==3.2.7
