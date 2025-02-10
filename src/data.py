@@ -6,6 +6,7 @@ import shutil
 
 from dotenv import load_dotenv
 import os
+from sklearn.model_selection import train_test_split  # type: ignore
 
 load_dotenv()
 
@@ -68,3 +69,55 @@ def data_validation() -> None:
 
     if not image_files == label_files:
         raise ValueError("Mismatch between image files and label files.")
+
+
+def data_preparation(random_seed: int, test_size: float, val_size: float) -> None:
+    """Prepare the data by splitting it into training, validation, and testing sets.
+
+    Args:
+        test_size (float): The proportion of the dataset to include in the test split.
+        val_size (float): The proportion of the training dataset to include in the validation split.
+        random_seed (int): The seed used by the random number generator.
+
+    Returns:
+        None
+    """
+    image_files = os.listdir("data/images")
+    label_files = os.listdir("data/labels")
+
+    image_files.sort()
+    label_files.sort()
+
+    images_train, images_test, labels_train, labels_test = train_test_split(
+        image_files, label_files, test_size=test_size, random_state=random_seed
+    )
+
+    val_size = val_size / (1 - test_size)
+
+    images_train, images_val, labels_train, labels_val = train_test_split(
+        images_train, labels_train, test_size=val_size, random_state=random_seed
+    )
+
+    os.makedirs("data/train/images", exist_ok=True)
+    os.makedirs("data/train/labels", exist_ok=True)
+
+    for image, label in zip(images_train, labels_train):
+        shutil.move(f"data/images/{image}", "data/train/images")
+        shutil.move(f"data/labels/{label}", "data/train/labels")
+
+    os.makedirs("data/test/images", exist_ok=True)
+    os.makedirs("data/test/labels", exist_ok=True)
+
+    for image, label in zip(images_test, labels_test):
+        shutil.move(f"data/images/{image}", "data/test/images")
+        shutil.move(f"data/labels/{label}", "data/test/labels")
+
+    os.makedirs("data/val/images", exist_ok=True)
+    os.makedirs("data/val/labels", exist_ok=True)
+
+    for image, label in zip(images_val, labels_val):
+        shutil.move(f"data/images/{image}", "data/val/images")
+        shutil.move(f"data/labels/{label}", "data/val/labels")
+
+    shutil.rmtree("data/images")
+    shutil.rmtree("data/labels")
