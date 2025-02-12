@@ -178,3 +178,8 @@ data/
 
 # Ignore dynaconf secret files
 .secrets.*
+
+*pt
+
+mlruns/
+runs/
