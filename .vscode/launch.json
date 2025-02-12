@@ -8,7 +8,7 @@
             "program": "${workspaceFolder}/src/main.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
-            "envFile": "${workspaceFolder}/docker/config/.env",
+            "envFile": "${workspaceFolder}/config/.env",
             "env": {
                 "MLFLOW_S3_ENDPOINT_URL": "http://localhost:9000"
             }
