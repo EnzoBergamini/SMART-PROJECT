@@ -10,7 +10,9 @@ if __name__ == "__main__":
         picsellia_dataset_uid=settings.PICSELLIA_DATASET_UID,
         path=settings.DATA_PATH,
     )
+
     data_validation(path=settings.DATA_PATH)
+
     data_preparation(
         random_seed=settings.DATA_SPLIT_SEED,
         test_size=settings.TEST_SIZE,

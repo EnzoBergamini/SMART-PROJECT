@@ -140,6 +140,7 @@ def data_preparation(
 
     with open(path + "/config.yaml", "w") as file:
         yaml.dump(yolo_data, file, default_flow_style=False, allow_unicode=True)
-        os.remove(path + "/data.yaml")
+
+    os.remove(path + "/data.yaml")
 
     print("Data preparation completed.")
