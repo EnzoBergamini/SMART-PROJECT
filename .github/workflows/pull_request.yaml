@@ -28,4 +28,4 @@ jobs:
 
       - name: Testing
         run: |
-          pytest --cov=./ --cov-report=xml
+          pytest src/test.py --cov=./ --cov-report=xml
