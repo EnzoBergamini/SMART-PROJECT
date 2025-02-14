@@ -16,3 +16,11 @@ repos:
     - id: check-merge-conflict
     - id: check-yaml
     - id: detect-private-key
+
+- repo: local
+  hooks:
+    - id: pytest
+      name: run python tests
+      entry: pytest src/test.py
+      language: system
+      files: \.txt$
