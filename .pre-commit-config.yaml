@@ -20,7 +20,7 @@ repos:
 - repo: local
   hooks:
     - id: pytest
-      name: run python tests
+      name: Run python tests
       entry: pytest src/test.py
       language: system
       files: \.txt$
