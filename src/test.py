@@ -3,7 +3,7 @@ import pytest
 
 
 class TestTextFiles:
-    @pytest.mark.parametrize("directory_path", ["../datasets/data/labels/test"])
+    @pytest.mark.parametrize("directory_path", ["data/labels/test"])
     def test_lines_have_five_words(self, directory_path):
         """Test to verify if the annotated labels have a good format. (5 values per line)
 
@@ -26,7 +26,7 @@ class TestTextFiles:
                             f"File '{filename}', Line {line_number}: Expected 5 words, found {len(words)} words"
                         )
 
-    @pytest.mark.parametrize("directory_path", ["../datasets/data/labels/test"])
+    @pytest.mark.parametrize("directory_path", ["data/labels/test"])
     def test_first_word_is_integer_between_0_and_10(self, directory_path):
         """Test to verify if the annotated labels exist. (value between 0 and 9)
 
