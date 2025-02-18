@@ -60,6 +60,13 @@ rename `.exemple.toml` to `.secrets.toml` and fill the fields
 pre-commit install
 ```
 
+5. **Configuration de minio**
+Lancer le docker-compose
+```sh
+docker-compose up -d
+```
+aller sur `http://localhost:9001` et se connecter avec les identifiants (voir le fichier `.env`) et créer un bucket `mlflow-artifacts`
+
 ---
 
 ## Pipeline de Training 🏋️‍♂️
