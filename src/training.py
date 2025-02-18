@@ -30,7 +30,7 @@ def model_training(
     with mlflow.start_run(
         run_name=pretrained_model_name + "-" + str(time.strftime("%d/%m/%Y-%H_%M_%S")),
         log_system_metrics=True,
-    ) as run:
+    ):
         model = YOLO(pretrained_model_name)
 
         model.train(
@@ -43,8 +43,6 @@ def model_training(
             device=device,
         )
 
-        mlflow.log_artifacts(
-            local_dir="../requirements.txt",
-            artifact_path="environment",
-            run_id=run.info.run_id,
-        )
+        mlflow.log_artifacts("../requirements.txt")
+
+        mlflow.log_artifacts("../data/config.yaml")
