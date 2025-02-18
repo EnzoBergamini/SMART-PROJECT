@@ -14,3 +14,4 @@ bentoml>=1.2.7
 pillow
 numpy
 opencv-python
+boto3==1.36.22
