@@ -1,0 +1,46 @@
+name: Deploy BentoML Service
+
+on:
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'  
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install bentoml ultralytics pillow numpy opencv-python
+
+    - name: Build BentoML Service
+      run: |
+        bentoml build  
+
+    - name: Log in to BentoCloud
+      env:
+        BENTO_CLOUD_API_KEY: ${{ secrets.BENTO_CLOUD_API_KEY }}
+      run: |
+        bentoml cloud login --api-key "$BENTO_CLOUD_API_KEY"
+
+    - name: Push Bento to BentoCloud
+      run: |
+        BENTO_TAG=$(bentoml list --format json | jq -r '.[0].tag')  
+        bentoml push "$BENTO_TAG"  
+
+    - name: Deploy to BentoCloud
+      run: |
+        bentoml cloud deployment create my-yolo-service --bento "$BENTO_TAG" --region eu-central  
