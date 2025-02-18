@@ -10,3 +10,4 @@ PyYAML==6.0.2
 dynaconf==3.2.7
 pytest
 pytest-cov
+bentoml
