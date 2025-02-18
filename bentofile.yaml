@@ -1,0 +1,16 @@
+service: "src/service:YOLOService"
+
+include:
+  - "src/service.py"
+
+python: 
+  requirements.txt: "./requirements.txt"
+
+docker:
+  python_version: "3.11"
+  system_packages:
+    - libgl1-mesa-glx
+    - libglib2.0-0
+  env:
+    - "MODEL_NAME=yolo11m.pt"
+    - "MODEL_WEIGHTS_PATH=ultralytics/weights"

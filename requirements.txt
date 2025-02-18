@@ -10,4 +10,8 @@ PyYAML==6.0.2
 dynaconf==3.2.7
 pytest
 pytest-cov
+bentoml>=1.2.7
+pillow
+numpy
+opencv-python
 boto3==1.36.22
