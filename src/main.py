@@ -1,5 +1,5 @@
-from data import data_extraction, data_preparation, data_validation
-from training import model_training
+from training import model_training, model_validation
+from data import data_extraction, data_validation, data_preparation
 from config import settings
 
 
@@ -31,3 +31,5 @@ if __name__ == "__main__":
         optimizer=settings.TRAIN_OPTIMIZER,
         device=settings.TRAIN_DEVICE,
     )
+
+    model_validation(model_name="SMART-MODEL")
